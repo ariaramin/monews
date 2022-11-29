@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 import 'package:iconsax/iconsax.dart';
@@ -5,6 +6,7 @@ import 'package:marquee/marquee.dart';
 import 'package:monews/widgets/agency_widget.dart';
 
 import '../constants/constants.dart';
+import '../widgets/news_horizontal_widget.dart';
 import '../widgets/news_widget.dart';
 
 class ExploreScreen extends StatefulWidget {
@@ -34,19 +36,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                 child: NestedScrollView(
                   headerSliverBuilder: (context, innerBoxIsScrolled) {
                     return [
-                      SliverAppBar(
-                        expandedHeight: 192,
-                        backgroundColor: whiteColor,
-                        flexibleSpace: FlexibleSpaceBar(
-                          background: Padding(
-                            padding: EdgeInsets.all(8),
-                            child: Image.asset(
-                              "images/banner1.png",
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                      ),
+                      _getSliverAppBar(),
                     ];
                   },
                   body: CustomScrollView(
@@ -61,16 +51,33 @@ class _ExploreScreenState extends State<ExploreScreen> {
                         ),
                       ),
                       SliverToBoxAdapter(
+                        child: _getTitle("خبر های داغ"),
+                      ),
+                      SliverToBoxAdapter(
+                        child: _getNewsList(),
+                      ),
+                      SliverToBoxAdapter(
                         child: _getTitle("خبرگزاری ها"),
                       ),
                       SliverToBoxAdapter(
                         child: _getAgencyList(),
                       ),
-                      SliverToBoxAdapter(
-                        child: _getTitle("پیشنهاد سردبیر"),
+                      SliverPadding(
+                        padding: EdgeInsets.only(bottom: 12),
+                        sliver: SliverToBoxAdapter(
+                          child: _getTitle("خبر هایی که علاقه دارید"),
+                        ),
                       ),
-                      SliverToBoxAdapter(
-                        child: _getNewsList(),
+                      SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                          (context, index) {
+                            return NewsHorizontalWidget();
+                          },
+                          childCount: 4,
+                        ),
+                      ),
+                      SliverPadding(
+                        padding: EdgeInsets.only(bottom: 28),
                       ),
                     ],
                   ),
@@ -191,6 +198,47 @@ class _ExploreScreenState extends State<ExploreScreen> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _getSliverAppBar() {
+    return SliverAppBar(
+      expandedHeight: 204,
+      backgroundColor: whiteColor,
+      flexibleSpace: FlexibleSpaceBar(
+        background: _getSlider(),
+      ),
+    );
+  }
+
+  Widget _getSlider() {
+    return CarouselSlider.builder(
+      options: CarouselOptions(
+        aspectRatio: 16 / 9,
+        viewportFraction: 1,
+        initialPage: 0,
+        enableInfiniteScroll: true,
+        reverse: false,
+        autoPlay: true,
+        autoPlayInterval: Duration(seconds: 3),
+        autoPlayAnimationDuration: Duration(milliseconds: 800),
+        autoPlayCurve: Curves.fastOutSlowIn,
+        enlargeCenterPage: true,
+        scrollDirection: Axis.horizontal,
+      ),
+      itemCount: 2,
+      itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) {
+        return Padding(
+          padding: EdgeInsets.all(8),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(18),
+            child: Image.asset(
+              "images/banner$itemIndex.png",
+              fit: BoxFit.cover,
+            ),
+          ),
+        );
+      },
     );
   }
 

@@ -12,6 +12,8 @@ dependencies:
   flutter:
     sdk: flutter
 
+  carousel_slider: ^4.1.1
+  flutter_svg: ^1.1.6
   iconsax: ^0.0.8
   cupertino_icons: ^1.0.2
   flutter_svg_provider: ^1.0.3
@@ -29,8 +31,7 @@ flutter:
 
   assets:
     - images/
-  #   - images/a_dot_ham.jpeg
-
+    - assets/icons/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

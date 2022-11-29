@@ -47,7 +47,7 @@ class HomeScreen extends StatelessWidget {
     return CustomScrollView(
       slivers: [
         SliverToBoxAdapter(
-          child: _getTitle("خبر های داغ"),
+          child: _getTitle("پیشنهاد سردبیر"),
         ),
         SliverToBoxAdapter(
           child: _getNewsList(),

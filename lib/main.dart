@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:monews/screen/explore_screen.dart';
 import 'package:monews/screen/home_screen.dart';
+import 'package:monews/screen/main_screen.dart';
 import 'package:monews/screen/news_screen.dart';
 import 'screen/splash_screen.dart';
 
@@ -18,7 +19,7 @@ class Application extends StatelessWidget {
       theme: ThemeData(
         fontFamily: "Shabnam",
       ),
-      home: HomeScreen(),
+      home: MainScreen(),
     );
   }
 }
