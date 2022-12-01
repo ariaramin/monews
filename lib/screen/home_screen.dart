@@ -1,11 +1,25 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg_provider/flutter_svg_provider.dart';
-import 'package:monews/constants/constants.dart';
-import 'package:monews/widgets/news_horizontal_widget.dart';
-import 'package:monews/widgets/news_widget.dart';
+import 'package:iconsax/iconsax.dart';
+import 'package:marquee/marquee.dart';
+import 'package:monews/widgets/agency_widget.dart';
+import 'package:monews/widgets/section_title.dart';
 
-class HomeScreen extends StatelessWidget {
+import '../constants/constants.dart';
+import '../repository.dart';
+import '../widgets/news_horizontal_widget.dart';
+import '../widgets/news_widget.dart';
+
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  int _selectedCategory = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -15,58 +29,78 @@ class HomeScreen extends StatelessWidget {
       body: SafeArea(
         child: Directionality(
           textDirection: TextDirection.rtl,
-          child: DefaultTabController(
-            length: 2,
-            initialIndex: 0,
-            child: NestedScrollView(
-              headerSliverBuilder: (context, innerBoxIsScrolled) {
-                return [
-                  SliverPadding(
-                    padding: EdgeInsets.symmetric(vertical: 18),
-                    sliver: SliverAppBar(
-                      backgroundColor: whiteColor,
-                      title: _getTabBar(context),
-                    ),
+          child: Stack(
+            alignment: AlignmentDirectional.bottomCenter,
+            children: [
+              DefaultTabController(
+                length: 2,
+                initialIndex: 0,
+                child: NestedScrollView(
+                  headerSliverBuilder: (context, innerBoxIsScrolled) {
+                    return [
+                      _getSliverAppBar(),
+                    ];
+                  },
+                  body: CustomScrollView(
+                    slivers: [
+                      SliverPadding(
+                        padding: EdgeInsets.only(
+                          top: 10,
+                          bottom: 16,
+                        ),
+                        sliver: SliverToBoxAdapter(
+                          child: _getCategoryList(),
+                        ),
+                      ),
+                      SliverToBoxAdapter(
+                        child: SectionTitle("خبر های داغ"),
+                      ),
+                      SliverToBoxAdapter(
+                        child: _getNewsList(),
+                      ),
+                      SliverToBoxAdapter(
+                        child: SectionTitle("خبرگزاری ها"),
+                      ),
+                      SliverToBoxAdapter(
+                        child: _getAgencyList(),
+                      ),
+                      SliverPadding(
+                        padding: EdgeInsets.only(bottom: 12),
+                        sliver: SliverToBoxAdapter(
+                          child: SectionTitle("خبر هایی که علاقه دارید"),
+                        ),
+                      ),
+                      SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                          (context, index) {
+                            return NewsHorizontalWidget(hot_news[index]);
+                          },
+                          childCount: hot_news.length,
+                        ),
+                      ),
+                      SliverPadding(
+                        padding: EdgeInsets.only(bottom: 28),
+                      ),
+                    ],
                   ),
-                ];
-              },
-              body: TabBarView(
-                children: [
-                  _getTabView(),
-                  _getTabView(),
-                ],
+                ),
               ),
-            ),
+              Container(
+                height: 34,
+                color: primaryColor,
+                child: Marquee(
+                  text:
+                      "برانکو تکذیب کرد/ نه با عمان فسخ کردم، نه با ایران مذاکره داشتم   ...   ",
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: whiteColor,
+                  ),
+                ),
+              )
+            ],
           ),
         ),
       ),
-    );
-  }
-
-  Widget _getTabView() {
-    return CustomScrollView(
-      slivers: [
-        SliverToBoxAdapter(
-          child: _getTitle("پیشنهاد سردبیر"),
-        ),
-        SliverToBoxAdapter(
-          child: _getNewsList(),
-        ),
-        SliverPadding(
-          padding: EdgeInsets.only(bottom: 14),
-          sliver: SliverToBoxAdapter(
-            child: _getTitle("خبر هایی که علاقه دارید"),
-          ),
-        ),
-        SliverList(
-          delegate: SliverChildBuilderDelegate(
-            (context, index) {
-              return NewsHorizontalWidget();
-            },
-            childCount: 4,
-          ),
-        ),
-      ],
     );
   }
 
@@ -76,63 +110,112 @@ class HomeScreen extends StatelessWidget {
       child: Center(
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
-          itemCount: 8,
+          itemCount: hot_news.length,
           itemBuilder: (context, index) {
-            return NewsWidget();
+            return NewsWidget(hot_news[index]);
           },
         ),
       ),
     );
   }
 
-  Widget _getTitle(String title) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 14),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          Text(
-            "مشاهده بیشتر",
-            style: TextStyle(
-              fontSize: 12,
-              color: primaryColor,
-            ),
-          ),
-        ],
+  Widget _getAgencyList() {
+    return Container(
+      height: 212,
+      child: Center(
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: 3,
+          itemBuilder: (context, index) {
+            return AgencyWidget(
+              "images/agency.png",
+              "ورزش سه",
+            );
+          },
+        ),
       ),
     );
   }
 
-  Widget _getTabBar(BuildContext context) {
+  Widget _getCategoryList() {
     return Container(
-      height: 42,
-      margin: EdgeInsets.symmetric(horizontal: 24),
-      child: TabBar(
-        indicator: BoxDecoration(
-          borderRadius: BorderRadius.circular(18),
-          color: primaryColor,
+      height: 36,
+      child: Center(
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: 5,
+          itemBuilder: (context, index) {
+            return _getCategoryItem(index);
+          },
         ),
-        labelStyle: TextStyle(
-          fontFamily: "Shabnam",
-          fontSize: 16,
-        ),
-        unselectedLabelColor: greyColor,
-        tabs: [
-          Tab(
-            text: "پیشنهادی",
-          ),
-          Tab(
-            text: "دنبال میکنید",
-          ),
-        ],
       ),
+    );
+  }
+
+  Widget _getCategoryItem(int index) {
+    List<String> itemList = ["همه", "جهان", "ورزش", "تکنولوژی", "علم و دانش"];
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _selectedCategory = index;
+        });
+      },
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 14),
+        margin: EdgeInsets.symmetric(horizontal: 6),
+        decoration: BoxDecoration(
+          color: index == _selectedCategory ? primaryLightColor : null,
+          borderRadius: BorderRadius.circular(28),
+        ),
+        child: Text(
+          itemList[index],
+          style: TextStyle(
+            fontSize: 14,
+            color: index == _selectedCategory ? primaryColor : greyColor,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _getSliverAppBar() {
+    return SliverAppBar(
+      expandedHeight: 204,
+      backgroundColor: whiteColor,
+      flexibleSpace: FlexibleSpaceBar(
+        background: _getSlider(),
+      ),
+    );
+  }
+
+  Widget _getSlider() {
+    return CarouselSlider.builder(
+      options: CarouselOptions(
+        aspectRatio: 16 / 9,
+        viewportFraction: 1,
+        initialPage: 0,
+        enableInfiniteScroll: true,
+        reverse: false,
+        autoPlay: true,
+        autoPlayInterval: Duration(seconds: 3),
+        autoPlayAnimationDuration: Duration(milliseconds: 800),
+        autoPlayCurve: Curves.fastOutSlowIn,
+        enlargeCenterPage: true,
+        scrollDirection: Axis.horizontal,
+      ),
+      itemCount: 2,
+      itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) {
+        return Padding(
+          padding: EdgeInsets.all(8),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(18),
+            child: Image.asset(
+              "images/banner$itemIndex.png",
+              fit: BoxFit.cover,
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -140,11 +223,19 @@ class HomeScreen extends StatelessWidget {
     return AppBar(
       backgroundColor: whiteColor,
       elevation: 0,
-      leading: Image(
-        image: Svg(
-          "images/notification-status.svg",
-          size: Size(24, 24),
-        ),
+      leadingWidth: 82,
+      leading: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Icon(
+            Iconsax.search_normal_1,
+            color: blackColor,
+          ),
+          Icon(
+            Iconsax.filter_edit,
+            color: blackColor,
+          ),
+        ],
       ),
       title: Image(
         image: Svg(

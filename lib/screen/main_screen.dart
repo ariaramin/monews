@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:monews/constants/constants.dart';
-import 'package:monews/screen/explore_screen.dart';
 import 'package:monews/screen/home_screen.dart';
+import 'package:monews/screen/explore_screen.dart';
+import 'package:monews/screen/marked_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -30,8 +31,9 @@ class _MainScreenState extends State<MainScreen> {
 
   List<Widget> _getScreens() {
     return [
-      ExploreScreen(),
       HomeScreen(),
+      ExploreScreen(),
+      MarkedScreen(),
     ];
   }
 

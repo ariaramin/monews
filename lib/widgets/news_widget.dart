@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:monews/models/news.dart';
 import 'package:monews/screen/news_screen.dart';
 import '../constants/constants.dart';
 
 class NewsWidget extends StatelessWidget {
-  const NewsWidget({super.key});
+  News news;
+  NewsWidget(this.news, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +17,7 @@ class NewsWidget extends StatelessWidget {
         onTap: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => NewsScreen(),
+              builder: (context) => NewsScreen(news),
             ),
           );
         },
@@ -46,7 +49,7 @@ class NewsWidget extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(18),
                       child: Image(
-                        image: AssetImage("images/news_image.png"),
+                        image: AssetImage("images/${news.image_url}"),
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -62,7 +65,7 @@ class NewsWidget extends StatelessWidget {
                       padding:
                           EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                       child: Text(
-                        "ورزشی",
+                        news.category,
                         style: TextStyle(
                           fontSize: 12,
                           color: whiteColor,
@@ -99,7 +102,7 @@ class NewsWidget extends StatelessWidget {
                           ],
                         ),
                         Text(
-                          "۵ دقیقه پیش",
+                          news.date!,
                           style: TextStyle(
                             fontSize: 12,
                             color: greyColor,
@@ -111,7 +114,7 @@ class NewsWidget extends StatelessWidget {
                       height: 8,
                     ),
                     Text(
-                      "پــاسـخ منـفـی پــورتـــو بـه چلـسـی بـرای جذب طارمی با طعم تهدید!",
+                      news.title,
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
@@ -126,30 +129,27 @@ class NewsWidget extends StatelessWidget {
                         Row(
                           children: [
                             Image(
-                              image: AssetImage("images/agency.png"),
+                              image:
+                                  AssetImage("images/${news.agency.image_url}"),
                               width: 20,
                             ),
                             SizedBox(
                               width: 4,
                             ),
                             Text(
-                              "خبرگزاری ورزش سه",
+                              "${news.agency.name} خبرگزاری",
                               style: TextStyle(
                                 fontSize: 12,
                               ),
                             ),
                           ],
                         ),
-                        Icon(
-                          Iconsax.more,
+                        SvgPicture.asset(
+                          "assets/icons/menu2.svg",
                           color: greyColor,
-                          size: 18,
                         ),
                       ],
                     ),
-                    SizedBox(
-                      height: 4,
-                    )
                   ],
                 ),
               ),

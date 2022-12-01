@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:monews/screen/explore_screen.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:monews/models/agency.dart';
+import 'package:monews/models/news.dart';
 import 'package:monews/screen/home_screen.dart';
+import 'package:monews/screen/explore_screen.dart';
 import 'package:monews/screen/main_screen.dart';
 import 'package:monews/screen/news_screen.dart';
 import 'screen/splash_screen.dart';
 
-void main() {
+Future<void> main() async {
+  await Hive.initFlutter();
+  Hive.registerAdapter(NewsAdapter());
+  Hive.registerAdapter(AgnecyAdapter());
+  await Hive.openBox<News>("marked_news");
   runApp(Application());
 }
 

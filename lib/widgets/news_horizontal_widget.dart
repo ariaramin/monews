@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:monews/models/news.dart';
 
 import '../constants/constants.dart';
 import '../screen/news_screen.dart';
 
 class NewsHorizontalWidget extends StatelessWidget {
-  const NewsHorizontalWidget({super.key});
+  News news;
+  NewsHorizontalWidget(this.news, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +18,7 @@ class NewsHorizontalWidget extends StatelessWidget {
         onTap: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => NewsScreen(),
+              builder: (context) => NewsScreen(news),
             ),
           );
         },
@@ -46,12 +49,12 @@ class NewsHorizontalWidget extends StatelessWidget {
                   children: [
                     Container(
                       width: double.infinity,
-                      height: 116,
+                      height: 118,
                       // height: double.infinity,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(18),
                         child: Image(
-                          image: AssetImage("images/news_image2.png"),
+                          image: AssetImage("images/${news.image_url}"),
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -67,7 +70,7 @@ class NewsHorizontalWidget extends StatelessWidget {
                         padding:
                             EdgeInsets.symmetric(horizontal: 14, vertical: 6),
                         child: Text(
-                          "تکنولوژی",
+                          news.category,
                           style: TextStyle(
                             fontSize: 10,
                             color: whiteColor,
@@ -85,7 +88,7 @@ class NewsHorizontalWidget extends StatelessWidget {
                   child: Column(
                     children: [
                       Text(
-                        "سـاعـت هوشـمـنـد گــارمـیـن Venu Sq 2 بـاعمر باتری ۱۱ روزه معرفی شد",
+                        news.title,
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w700,
@@ -95,7 +98,7 @@ class NewsHorizontalWidget extends StatelessWidget {
                         height: 6,
                       ),
                       Text(
-                        "گارمین در رویداد IFA ۲۰۲۲ ساعت هوشمند Venu Sq 2 و ردیاب سلامت کودکان موسوم به Black Panther Vivofit Jr 3 را معرفی کرد.",
+                        news.text,
                         style: TextStyle(
                           fontSize: 10,
                           color: greyColor,
@@ -117,17 +120,16 @@ class NewsHorizontalWidget extends StatelessWidget {
                                 width: 4,
                               ),
                               Text(
-                                "خبرگزاری زومیت",
+                                "خبرگزاری ${news.agency.name}",
                                 style: TextStyle(
                                   fontSize: 12,
                                 ),
                               ),
                             ],
                           ),
-                          Icon(
-                            Iconsax.more,
+                          SvgPicture.asset(
+                            "assets/icons/menu2.svg",
                             color: greyColor,
-                            size: 18,
                           ),
                         ],
                       ),

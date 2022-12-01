@@ -1,9 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hive/hive.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:monews/constants/constants.dart';
+import 'package:monews/models/news.dart';
 
-class NewsScreen extends StatelessWidget {
-  const NewsScreen({super.key});
+class NewsScreen extends StatefulWidget {
+  News news;
+  NewsScreen(this.news, {super.key});
+
+  @override
+  State<NewsScreen> createState() => _NewsScreenState();
+}
+
+class _NewsScreenState extends State<NewsScreen> {
+  late News news;
+  bool _isMarked = false;
+
+  @override
+  void initState() {
+    super.initState();
+    this.news = widget.news;
+    _checkIsNewsMarked();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +57,7 @@ class NewsScreen extends StatelessWidget {
           child: Column(
             children: [
               Text(
-                "پــاسـخ منـفـی پــورتـــو بـه چلـسـی بـرای جذب طارمی با طعم تهدید!",
+                widget.news.title,
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -56,7 +75,7 @@ class NewsScreen extends StatelessWidget {
                 height: 12,
               ),
               Text(
-                "باشگاه چلسی که پیگیر جذب مهدی طارمی مهاجـم ایران بـود، با پاسـخ منفی باشگاه پورتو مواجه شد و این بازیـکن باوجود رویای بازی در لیگ برتر انگلیس فعلا در پرتغال ماندنی است.",
+                widget.news.text,
                 style: TextStyle(
                   fontSize: 12,
                   height: 1.8,
@@ -83,7 +102,7 @@ class NewsScreen extends StatelessWidget {
       child: Center(
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
-          itemCount: 3,
+          itemCount: widget.news.tags.length,
           itemBuilder: (context, index) {
             return _getCategoryItem(index);
           },
@@ -137,14 +156,14 @@ class NewsScreen extends StatelessWidget {
         Row(
           children: [
             Image(
-              image: AssetImage("images/agency.png"),
+              image: AssetImage("images/${widget.news.agency.image_url}"),
               width: 18,
             ),
             SizedBox(
               width: 4,
             ),
             Text(
-              "خبرگزاری ورزش سه",
+              "خبرگزاری ${widget.news.agency.name}",
               style: TextStyle(
                 fontSize: 12,
               ),
@@ -152,7 +171,7 @@ class NewsScreen extends StatelessWidget {
           ],
         ),
         Text(
-          "۵ دقیقه پیش",
+          widget.news.date,
           style: TextStyle(
             fontSize: 12,
             color: greyColor,
@@ -172,23 +191,33 @@ class NewsScreen extends StatelessWidget {
             onPressed: () {
               Navigator.of(context).pop();
             },
-            icon: Icon(
-              Iconsax.arrow_right_2,
+            icon: SvgPicture.asset(
+              "assets/icons/arrow-right.svg",
               color: whiteColor,
             ),
           ),
           Row(
             children: [
-              Icon(
-                Iconsax.save_2,
+              GestureDetector(
+                onTap: () {
+                  _storeNews();
+                },
+                child: SvgPicture.asset(
+                  _isMarked
+                      ? "assets/icons/frame-fill.svg"
+                      : "assets/icons/frame.svg",
+                  color: whiteColor,
+                ),
+              ),
+              SizedBox(
+                width: 28,
+              ),
+              SvgPicture.asset(
+                "assets/icons/menu.svg",
                 color: whiteColor,
               ),
               SizedBox(
-                width: 20,
-              ),
-              Icon(
-                Iconsax.more_2,
-                color: whiteColor,
+                width: 8,
               ),
             ],
           ),
@@ -199,7 +228,7 @@ class NewsScreen extends StatelessWidget {
       expandedHeight: 284,
       flexibleSpace: FlexibleSpaceBar(
         background: Image.asset(
-          "images/news_image.png",
+          "images/${widget.news.image_url}",
           fit: BoxFit.cover,
         ),
       ),
@@ -228,5 +257,29 @@ class NewsScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _storeNews() {
+    var marked_news = Hive.box<News>("marked_news");
+
+    if (!_isMarked) {
+      marked_news.put(news.id, news);
+    } else {
+      marked_news.delete(news.id);
+    }
+
+    setState(() {
+      _isMarked = !_isMarked;
+    });
+  }
+
+  void _checkIsNewsMarked() {
+    var marked_news = Hive.box<News>("marked_news");
+    var this_news = marked_news.get(news.id);
+    if (this_news != null) {
+      setState(() {
+        _isMarked = true;
+      });
+    }
   }
 }
