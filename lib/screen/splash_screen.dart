@@ -1,12 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 import 'package:monews/constants/constants.dart';
+import 'package:monews/screen/main_screen.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    Future.delayed(
+      Duration(milliseconds: 1800),
+      () {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MainScreen(),
+          ),
+          (route) => false,
+        );
+      },
+    );
     return Container(
       decoration: BoxDecoration(
         color: whiteColor,

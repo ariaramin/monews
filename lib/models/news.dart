@@ -21,7 +21,7 @@ class News extends HiveObject {
   String text;
 
   @HiveField(5)
-  Agnecy agency;
+  Agency agency;
 
   @HiveField(6)
   List<String> tags;

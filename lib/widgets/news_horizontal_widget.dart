@@ -44,103 +44,115 @@ class NewsHorizontalWidget extends StatelessWidget {
             children: [
               Expanded(
                 flex: 1,
-                child: Stack(
-                  alignment: AlignmentDirectional.topStart,
-                  children: [
-                    Container(
-                      width: double.infinity,
-                      height: 118,
-                      // height: double.infinity,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(18),
-                        child: Image(
-                          image: AssetImage("images/${news.image_url}"),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      top: 6,
-                      right: 6,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: primaryColor.withOpacity(.5),
-                          borderRadius: BorderRadius.circular(18),
-                        ),
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-                        child: Text(
-                          news.category,
-                          style: TextStyle(
-                            fontSize: 10,
-                            color: whiteColor,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                child: _getNewsImage(),
               ),
               Expanded(
                 flex: 2,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 6),
-                  child: Column(
-                    children: [
-                      Text(
-                        news.title,
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 6,
-                      ),
-                      Text(
-                        news.text,
-                        style: TextStyle(
-                          fontSize: 10,
-                          color: greyColor,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 8,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              Image(
-                                image: AssetImage("images/agency2.png"),
-                                width: 20,
-                              ),
-                              SizedBox(
-                                width: 4,
-                              ),
-                              Text(
-                                "خبرگزاری ${news.agency.name}",
-                                style: TextStyle(
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ],
-                          ),
-                          SvgPicture.asset(
-                            "assets/icons/menu2.svg",
-                            color: greyColor,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
+                child: _getNewsContent(),
               ),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget _getNewsContent() {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 6),
+      child: Column(
+        children: [
+          Text(
+            news.title,
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          SizedBox(
+            height: 6,
+          ),
+          Text(
+            _getNewsText(news.text),
+            style: TextStyle(
+              fontSize: 10,
+              color: greyColor,
+            ),
+            textAlign: TextAlign.justify,
+          ),
+          SizedBox(
+            height: 8,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Image(
+                    image: AssetImage("images/${news.agency.image_url}"),
+                    width: 20,
+                  ),
+                  SizedBox(
+                    width: 4,
+                  ),
+                  Text(
+                    "خبرگزاری ${news.agency.name}",
+                    style: TextStyle(
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
+              SvgPicture.asset(
+                "assets/icons/menu2.svg",
+                color: greyColor,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _getNewsText(String text) {
+    return text.length >= 152 ? text.substring(0, 152) + "..." : text;
+  }
+
+  Widget _getNewsImage() {
+    return Stack(
+      alignment: AlignmentDirectional.topStart,
+      children: [
+        Container(
+          width: double.infinity,
+          height: 118,
+          // height: double.infinity,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(18),
+            child: Image(
+              image: AssetImage("images/${news.image_url}"),
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+        Positioned(
+          top: 6,
+          right: 6,
+          child: Container(
+            decoration: BoxDecoration(
+              color: primaryColor.withOpacity(.5),
+              borderRadius: BorderRadius.circular(18),
+            ),
+            padding: EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+            child: Text(
+              news.category,
+              style: TextStyle(
+                fontSize: 10,
+                color: whiteColor,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

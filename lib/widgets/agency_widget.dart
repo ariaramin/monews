@@ -1,11 +1,13 @@
 import "package:flutter/material.dart";
+import 'package:monews/models/agency.dart';
+import 'package:monews/repository.dart';
 
 import '../constants/constants.dart';
 
 class AgencyWidget extends StatelessWidget {
-  String _imageSource, _title;
+  Agency _agency;
 
-  AgencyWidget(this._imageSource, this._title, {super.key});
+  AgencyWidget(this._agency, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +33,7 @@ class AgencyWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset(
-              _imageSource,
+              "images/${_agency.image_url}",
               fit: BoxFit.cover,
               width: 56,
             ),
@@ -39,7 +41,7 @@ class AgencyWidget extends StatelessWidget {
               height: 14,
             ),
             Text(
-              _title,
+              _agency.name,
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.bold,

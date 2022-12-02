@@ -14,13 +14,13 @@ class NewsScreen extends StatefulWidget {
 }
 
 class _NewsScreenState extends State<NewsScreen> {
-  late News news;
+  late News _news;
   bool _isMarked = false;
 
   @override
   void initState() {
     super.initState();
-    this.news = widget.news;
+    this._news = widget.news;
     _checkIsNewsMarked();
   }
 
@@ -30,69 +30,65 @@ class _NewsScreenState extends State<NewsScreen> {
       backgroundColor: whiteColor,
       body: Directionality(
         textDirection: TextDirection.rtl,
-        child: NestedScrollView(
-          headerSliverBuilder: (context, innerBoxIsScrolled) {
-            return [
-              _getAppBar(context),
-            ];
-          },
-          body: _getContent(),
+        child: SafeArea(
+          child: NestedScrollView(
+            headerSliverBuilder: (context, innerBoxIsScrolled) {
+              return [
+                _getAppBar(context),
+              ];
+            },
+            body: _getContent(),
+          ),
         ),
       ),
     );
   }
 
   Widget _getContent() {
-    return Column(
-      children: [
-        SizedBox(
-          height: 6,
-        ),
-        _getNewsDetail(),
-        SizedBox(
-          height: 14,
-        ),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 14),
-          child: Column(
-            children: [
-              Text(
-                widget.news.title,
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(
-                height: 12,
-              ),
-              Wrap(
-                children: [
-                  _getCategoryList(),
-                ],
-              ),
-              SizedBox(
-                height: 12,
-              ),
-              Text(
-                widget.news.text,
-                style: TextStyle(
-                  fontSize: 12,
-                  height: 1.8,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Text(
-                " طـارمـی در لـیـگ قـهـرمـانـان دو فــصـل پــیــش اروپـا و در دیـدار مـقـابـلچلسی عملکرد بی نظیری داشت و با یک گل قیچی برگردان، پورتو رابه پیروزی رساند. هرچند که نماینده پرتـغال به خاطر مجموع نـتـایـج بازی رفت و برگشت حـذف شد. با ایـن حـال گـل طـارمـی حتـی تـا یک قـدمی انـتخـاب بهـترین گـل سـال فیـفا و دریـافـت جـایزه «پوشکاش» هم پیش رفت.بحث پیشنهاد باشگاه چلسـی انـگـلیس به پـورتـو بـرای جـذب مـهدی طــارمـی در آخـریــن ســاعــات نــقـل و انـتـقـالـات فــوتـبـال اروپـا یــکـی از سوژه‌های اصلی هواداران دو تیم بود. این خبر در حالی رسانه‌ای شد که گفته می‌شد چلسی برای جذب طارمی مبلغ ۲۵ میلیون یورو را به پورتو پیشنهاد داده است. روزنـامه «ابولا» پرتغال هم روز چهارشنـبـه ایــن خـبر را اعلـام کرد و به دنبال آن بعضی از مطبوعات انگلیس و کشورهای دیگر هم پیشنهاد چلسی به طارمی را دنبال کردند.",
-                style: TextStyle(
-                  fontSize: 12,
-                  height: 1.8,
-                ),
-              ),
-            ],
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          SizedBox(
+            height: 6,
           ),
-        ),
-      ],
+          _getNewsDetail(),
+          SizedBox(
+            height: 14,
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 14),
+            child: Column(
+              children: [
+                Text(
+                  widget.news.title,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(
+                  height: 12,
+                ),
+                Wrap(
+                  children: [
+                    _getCategoryList(),
+                  ],
+                ),
+                SizedBox(
+                  height: 12,
+                ),
+                Text(
+                  _news.text,
+                  style: TextStyle(
+                    fontSize: 12,
+                    height: 1.8,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -102,7 +98,7 @@ class _NewsScreenState extends State<NewsScreen> {
       child: Center(
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
-          itemCount: widget.news.tags.length,
+          itemCount: _news.tags.length,
           itemBuilder: (context, index) {
             return _getCategoryItem(index);
           },
@@ -112,7 +108,6 @@ class _NewsScreenState extends State<NewsScreen> {
   }
 
   Widget _getCategoryItem(int index) {
-    List<String> itemList = ["ورزشی", "لژیونر ها", "فوتبال اروپا"];
     return Container(
       padding: EdgeInsets.symmetric(vertical: 8, horizontal: 14),
       margin: EdgeInsets.symmetric(horizontal: 6),
@@ -121,7 +116,7 @@ class _NewsScreenState extends State<NewsScreen> {
         borderRadius: BorderRadius.circular(28),
       ),
       child: Text(
-        itemList[index],
+        _news.tags[index],
         style: TextStyle(
           fontSize: 12,
           color: primaryColor,
@@ -156,14 +151,14 @@ class _NewsScreenState extends State<NewsScreen> {
         Row(
           children: [
             Image(
-              image: AssetImage("images/${widget.news.agency.image_url}"),
+              image: AssetImage("images/${_news.agency.image_url}"),
               width: 18,
             ),
             SizedBox(
               width: 4,
             ),
             Text(
-              "خبرگزاری ${widget.news.agency.name}",
+              "خبرگزاری ${_news.agency.name}",
               style: TextStyle(
                 fontSize: 12,
               ),
@@ -171,7 +166,7 @@ class _NewsScreenState extends State<NewsScreen> {
           ],
         ),
         Text(
-          widget.news.date,
+          _news.date,
           style: TextStyle(
             fontSize: 12,
             color: greyColor,
@@ -225,10 +220,10 @@ class _NewsScreenState extends State<NewsScreen> {
       ),
       centerTitle: true,
       automaticallyImplyLeading: false,
-      expandedHeight: 284,
+      expandedHeight: 304,
       flexibleSpace: FlexibleSpaceBar(
         background: Image.asset(
-          "images/${widget.news.image_url}",
+          "images/${_news.image_url}",
           fit: BoxFit.cover,
         ),
       ),
@@ -263,9 +258,9 @@ class _NewsScreenState extends State<NewsScreen> {
     var marked_news = Hive.box<News>("marked_news");
 
     if (!_isMarked) {
-      marked_news.put(news.id, news);
+      marked_news.put(_news.id, _news);
     } else {
-      marked_news.delete(news.id);
+      marked_news.delete(_news.id);
     }
 
     setState(() {
@@ -275,7 +270,7 @@ class _NewsScreenState extends State<NewsScreen> {
 
   void _checkIsNewsMarked() {
     var marked_news = Hive.box<News>("marked_news");
-    var this_news = marked_news.get(news.id);
+    var this_news = marked_news.get(_news.id);
     if (this_news != null) {
       setState(() {
         _isMarked = true;

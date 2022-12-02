@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:monews/constants/constants.dart';
 import 'package:monews/screen/home_screen.dart';
 import 'package:monews/screen/explore_screen.dart';
@@ -22,10 +21,7 @@ class _MainScreenState extends State<MainScreen> {
       backgroundColor: whiteColor,
       extendBody: true,
       bottomNavigationBar: _getBottomNavigation(),
-      body: IndexedStack(
-        index: _selectedItem,
-        children: _getScreens(),
-      ),
+      body: _getScreens()[_selectedItem],
     );
   }
 
@@ -34,6 +30,7 @@ class _MainScreenState extends State<MainScreen> {
       HomeScreen(),
       ExploreScreen(),
       MarkedScreen(),
+      Container(),
     ];
   }
 

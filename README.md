@@ -1,6 +1,6 @@
 # monews
 
-A new Flutter project.
+![image](preview/monews.png)
 
 ## Getting Started
 

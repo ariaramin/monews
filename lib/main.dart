@@ -2,11 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:monews/models/agency.dart';
 import 'package:monews/models/news.dart';
-import 'package:monews/screen/home_screen.dart';
-import 'package:monews/screen/explore_screen.dart';
-import 'package:monews/screen/main_screen.dart';
-import 'package:monews/screen/news_screen.dart';
-import 'screen/splash_screen.dart';
+import 'package:monews/screen/splash_screen.dart';
 
 Future<void> main() async {
   await Hive.initFlutter();
@@ -26,7 +22,7 @@ class Application extends StatelessWidget {
       theme: ThemeData(
         fontFamily: "Shabnam",
       ),
-      home: MainScreen(),
+      home: SplashScreen(),
     );
   }
 }

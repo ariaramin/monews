@@ -73,9 +73,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       SliverList(
                         delegate: SliverChildBuilderDelegate(
                           (context, index) {
-                            return NewsHorizontalWidget(hot_news[index]);
+                            return NewsHorizontalWidget(tech_news[index]);
                           },
-                          childCount: hot_news.length,
+                          childCount: tech_news.length,
                         ),
                       ),
                       SliverPadding(
@@ -89,8 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: 34,
                 color: primaryColor,
                 child: Marquee(
-                  text:
-                      "برانکو تکذیب کرد/ نه با عمان فسخ کردم، نه با ایران مذاکره داشتم   ...   ",
+                  text: subtitle,
                   style: TextStyle(
                     fontSize: 14,
                     color: whiteColor,
@@ -125,12 +124,9 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Center(
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
-          itemCount: 3,
+          itemCount: agencies.length,
           itemBuilder: (context, index) {
-            return AgencyWidget(
-              "images/agency.png",
-              "ورزش سه",
-            );
+            return AgencyWidget(agencies[index]);
           },
         ),
       ),

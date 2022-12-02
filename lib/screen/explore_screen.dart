@@ -63,9 +63,9 @@ class ExploreScreen extends StatelessWidget {
         SliverList(
           delegate: SliverChildBuilderDelegate(
             (context, index) {
-              return NewsHorizontalWidget(hot_news[index]);
+              return NewsHorizontalWidget(tech_news[index]);
             },
-            childCount: hot_news.length,
+            childCount: tech_news.length,
           ),
         ),
       ],

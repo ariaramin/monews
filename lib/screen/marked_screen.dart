@@ -41,7 +41,7 @@ class _MarkedScreenState extends State<MarkedScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "خبرهایی که مارک شده‌اند",
+                      "خبرهای مارک شده‌",
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
@@ -51,7 +51,17 @@ class _MarkedScreenState extends State<MarkedScreen> {
                 ),
               ),
               Expanded(
-                child: _getNewsList(),
+                child: _marked_news.isEmpty
+                    ? Center(
+                        child: Text(
+                          "هیچ خبری مارک نشده است",
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: greyColor,
+                          ),
+                        ),
+                      )
+                    : _getNewsList(),
               ),
             ],
           ),
@@ -88,5 +98,6 @@ class _MarkedScreenState extends State<MarkedScreen> {
     setState(() {
       _marked_news = marked_news.values.toList();
     });
+    print(_marked_news.length);
   }
 }

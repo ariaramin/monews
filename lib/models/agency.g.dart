@@ -6,24 +6,24 @@ part of 'agency.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
-class AgnecyAdapter extends TypeAdapter<Agnecy> {
+class AgnecyAdapter extends TypeAdapter<Agency> {
   @override
   final int typeId = 2;
 
   @override
-  Agnecy read(BinaryReader reader) {
+  Agency read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Agnecy(
+    return Agency(
       fields[0] as String,
       fields[1] as String,
     );
   }
 
   @override
-  void write(BinaryWriter writer, Agnecy obj) {
+  void write(BinaryWriter writer, Agency obj) {
     writer
       ..writeByte(2)
       ..writeByte(0)

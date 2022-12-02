@@ -22,7 +22,7 @@ class NewsAdapter extends TypeAdapter<News> {
       fields[2] as String,
       fields[3] as String,
       fields[4] as String,
-      fields[5] as Agnecy,
+      fields[5] as Agency,
       (fields[6] as List).cast<String>(),
       fields[7] as String,
     );
